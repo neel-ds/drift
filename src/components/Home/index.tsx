@@ -3,17 +3,8 @@
 import { tokens } from "@/constants/token";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Button } from "../ui/button";
-import { useDrift } from "@/contexts/DriftContext";
 
 export default function Home() {
-  const { driftClient } = useDrift();
-
-  const handleClick = async () => {
-    if (!driftClient) return;
-    console.log("Drift Client is ready");
-  };
-
   return (
     <div className="flex flex-col md:flex-row gap-2 pt-14 px-3 pb-3">
       {/* CHART & ORDERBOOK */}
@@ -58,7 +49,6 @@ export default function Home() {
             <TabsContent value="positions">
               <div className="py-16 border-t border-neutral-700 text-center text-neutral-400">
                 No positions found
-                <Button onClick={handleClick}>Get positions</Button>
               </div>
             </TabsContent>
             <TabsContent value="orders">

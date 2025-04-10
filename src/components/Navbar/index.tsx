@@ -8,6 +8,7 @@ import { formatAddress } from "@/lib/formatAddress";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
+import Account from "./Account";
 
 const WalletButton = dynamic(
   () =>
@@ -43,17 +44,23 @@ export default function Navbar() {
           <Loader2 className="w-4 h-4 animate-spin" /> Loading...
         </Button>
       ) : (
-        <WalletButton
-          style={{
-            background: "linear-gradient(to right, #fdba74, #8b5cf6, #38bdf8)",
-            borderRadius: "1px",
-            padding: "1rem 1rem",
-            height: "0.2rem",
-            color: "#171717",
-          }}
-        >
-          {publicKey ? formatAddress(publicKey.toBase58()) : "Connect"}
-        </WalletButton>
+        <div className="flex items-center gap-2">
+          {/* Login Button */}
+          <WalletButton
+            style={{
+              background: "linear-gradient(to right, #fdba74, #8b5cf6, #38bdf8)",
+              borderRadius: "1px",
+              padding: "1rem 1rem",
+              height: "0.2rem",
+              color: "#171717",
+            }}
+          >
+            {publicKey ? formatAddress(publicKey.toBase58()) : "Connect"}
+          </WalletButton>
+
+          {/* Account Drawer */}
+          {publicKey && <Account />}
+        </div>
       )}
     </nav>
   );
