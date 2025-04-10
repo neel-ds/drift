@@ -5,6 +5,7 @@ import { WalletProvider } from "@solana/wallet-adapter-react";
 import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { DriftProvider } from "./DriftContext";
 
 interface WalletProps {
   children: React.ReactNode;
@@ -15,7 +16,9 @@ export const Provider: FC<WalletProps> = ({ children }) => {
 
   return (
     <WalletProvider wallets={wallets} autoConnect>
-      <WalletModalProvider>{children}</WalletModalProvider>
+      <WalletModalProvider>
+        <DriftProvider>{children}</DriftProvider>
+      </WalletModalProvider>
     </WalletProvider>
   );
 };
