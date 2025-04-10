@@ -7,14 +7,20 @@ import { DriftClient } from "@drift-labs/sdk";
 import { CONNECTION } from "@/lib/connection";
 import { getBalance } from "@/lib/getBalance";
 
+type Balance = {
+  balance: number;
+  balanceInUSD: number;
+};
+
 interface DriftContextType {
   driftClient: DriftClient | null;
   isLoading: boolean;
   error: Error | null;
   subaccounts: string[];
-  balances: number[];
+  balances: Balance[];
   isNewUser: boolean;
   refetch: () => void;
+  refetchBalances: () => void;
 }
 
 const DriftContext = createContext<DriftContextType>({
@@ -25,6 +31,7 @@ const DriftContext = createContext<DriftContextType>({
   balances: [],
   isNewUser: false,
   refetch: () => {},
+  refetchBalances: () => {},
 });
 
 export const useDrift = () => useContext(DriftContext);
@@ -35,7 +42,7 @@ export function DriftProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [subaccounts, setSubaccounts] = useState<string[]>([]);
-  const [balances, setBalances] = useState<number[]>([]);
+  const [balances, setBalances] = useState<Balance[]>([]);
   const [isNewUser, setIsNewUser] = useState(false);
 
   const initializeDrift = async () => {
@@ -72,9 +79,8 @@ export function DriftProvider({ children }: { children: ReactNode }) {
       setSubaccounts(subaccounts);
 
       const balances = await getBalance(subaccounts);
-      const balancesInUsd = balances.map((balance) => balance.balanceInUSD);
 
-      setBalances(balancesInUsd);
+      setBalances(balances);
 
       setError(null);
     } catch (err) {
@@ -94,9 +100,23 @@ export function DriftProvider({ children }: { children: ReactNode }) {
     initializeDrift();
   };
 
+  const refetchBalances = async () => {
+    const balances = await getBalance(subaccounts);
+    setBalances(balances);
+  };
+
   return (
     <DriftContext.Provider
-      value={{ driftClient, isLoading, error, subaccounts, balances, isNewUser, refetch }}
+      value={{
+        driftClient,
+        isLoading,
+        error,
+        subaccounts,
+        balances,
+        isNewUser,
+        refetch,
+        refetchBalances,
+      }}
     >
       {children}
     </DriftContext.Provider>

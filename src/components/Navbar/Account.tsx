@@ -14,6 +14,7 @@ import { copyClipboard } from "@/lib/copyClipboard";
 import { toast } from "sonner";
 import { useDrift } from "@/contexts/DriftContext";
 import { useState } from "react";
+import ManageBalance from "./ManageBalance";
 
 export default function Account() {
   const { publicKey, disconnect } = useWallet();
@@ -56,6 +57,7 @@ export default function Account() {
   if (isNewUser) {
     return (
       <>
+        {/* Button - Create subaccount for new user */}
         <Button
           variant="outline"
           className="hidden md:inline-flex h-8"
@@ -101,6 +103,8 @@ export default function Account() {
       <SheetTrigger className="cursor-pointer">
         <MenuIcon className="w-6 h-6" />
       </SheetTrigger>
+
+      {/* Account Management */}
       <SheetContent>
         <SheetHeader>
           <SheetTitle className="text-cyan-400">
@@ -127,12 +131,21 @@ export default function Account() {
             </div>
           </SheetDescription>
         </SheetHeader>
-        <div className="flex px-4 border-b border-neutral-700 pb-2">
+
+        {/* Balance */}
+        <div className="flex flex-col gap-2 px-4 border-b border-neutral-700 pb-2">
           <div className="flex flex-col gap-1">
             <p className="text-xs text-indigo-400">Subaccount Balance</p>
-            <h1 className="text-2xl font-medium">${balances[activeSubaccountIndex]?.toFixed(2)}</h1>
+            <h1 className="text-2xl font-medium">
+              ${balances[activeSubaccountIndex]?.balanceInUSD.toFixed(2)}
+            </h1>
           </div>
+
+          {/* Manage Balance */}
+          <ManageBalance />
         </div>
+
+        {/* Subaccounts */}
         <div className="flex flex-col px-2 gap-2 pt-2">
           {subaccounts.map((subaccount, index) => (
             <div
@@ -156,9 +169,11 @@ export default function Account() {
                   <Copy />
                 </Button>
               </span>
-              <p>${balances[index]?.toFixed(2)}</p>
+              <p>${balances[index]?.balanceInUSD.toFixed(2)}</p>
             </div>
           ))}
+
+          {/* Add Subaccount */}
           <Button variant="outline" onClick={initializeSubaccount} disabled={isCreatingSubaccount}>
             {isCreatingSubaccount ? (
               <>
