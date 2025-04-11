@@ -2,7 +2,8 @@
 
 import { tokens } from "@/constants/token";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import Trade from "./Trade";
+import Orders from "./Orders";
 
 export default function Home() {
   return (
@@ -33,58 +34,11 @@ export default function Home() {
         </div>
 
         {/* ORDERBOOK */}
-        <div className="border-t border-neutral-700">
-          <Tabs defaultValue="positions">
-            <TabsList className="border border-neutral-800 h-10">
-              <TabsTrigger
-                value="positions"
-                className="data-[state=active]:bg-transparent border-r border-neutral-800"
-              >
-                Positions
-              </TabsTrigger>
-              <TabsTrigger value="orders" className="data-[state=active]:bg-transparent">
-                Orders
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="positions">
-              <div className="py-16 border-t border-neutral-700 text-center text-neutral-400">
-                No positions found
-              </div>
-            </TabsContent>
-            <TabsContent value="orders">
-              <div className="py-16 border-t border-neutral-700 text-center text-neutral-400">
-                No orders found
-              </div>
-            </TabsContent>
-          </Tabs>
-        </div>
+        <Orders />
       </div>
 
       {/* TRADING WIDGETS */}
-      <div className="flex flex-col w-full md:w-1/3 2xl:w-1/4 bg-zinc-900 border border-neutral-800 p-3 h-fit">
-        <Tabs defaultValue="long">
-          <TabsList className="w-full border border-neutral-800">
-            <TabsTrigger
-              value="long"
-              className="data-[state=active]:bg-green-300 data-[state=active]:text-black text-green-300 "
-            >
-              LONG
-            </TabsTrigger>
-            <TabsTrigger
-              value="short"
-              className="data-[state=active]:bg-red-400 data-[state=active]:text-black text-red-400 "
-            >
-              SHORT
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="long">
-            <div className="py-16 text-center text-neutral-400">Make long positions here</div>
-          </TabsContent>
-          <TabsContent value="short">
-            <div className="py-16 text-center text-neutral-400">Make short positions here</div>
-          </TabsContent>
-        </Tabs>
-      </div>
+      <Trade />
     </div>
   );
 }

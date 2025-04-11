@@ -24,6 +24,13 @@ export default function Account() {
 
   if (!publicKey || !driftClient) return null;
 
+  const user = driftClient?.getUser();
+  const activeSubaccount = user?.getUserAccountPublicKey().toBase58();
+
+  const activeSubaccountIndex = subaccounts.findIndex(
+    (subaccount) => subaccount === activeSubaccount,
+  );
+
   const initializeSubaccount = async () => {
     setIsCreatingSubaccount(true);
     try {
@@ -90,13 +97,6 @@ export default function Account() {
       </>
     );
   }
-
-  const user = driftClient.getUser();
-  const activeSubaccount = user?.getUserAccountPublicKey().toBase58();
-
-  const activeSubaccountIndex = subaccounts.findIndex(
-    (subaccount) => subaccount === activeSubaccount,
-  );
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

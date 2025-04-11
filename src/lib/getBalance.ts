@@ -1,12 +1,15 @@
 import axios from "axios";
+import { getSolPrice } from "./getSolPrice";
 
+/**
+ * Gets the balance of a user
+ * @param addresses - The addresses of the users to get the balance of
+ * @returns The balance of the users
+ */
 export async function getBalance(
   addresses: string[],
 ): Promise<{ balanceInUSD: number; balance: number }[]> {
-  const response = await axios.get(
-    "https://lite-api.jup.ag/price/v2?ids=So11111111111111111111111111111111111111112",
-  );
-  const solPrice = response.data.data.So11111111111111111111111111111111111111112.price;
+  const solPrice = await getSolPrice();
 
   const balancesResponse = await Promise.all(
     addresses.map(async (address) => {

@@ -28,7 +28,12 @@ const DriftContext = createContext<DriftContextType>({
   isLoading: false,
   error: null,
   subaccounts: [],
-  balances: [],
+  balances: [
+    {
+      balance: 0,
+      balanceInUSD: 0,
+    },
+  ],
   isNewUser: false,
   refetch: () => {},
   refetchBalances: () => {},

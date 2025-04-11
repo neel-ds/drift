@@ -12,7 +12,7 @@ import { Loader2 } from "lucide-react";
 
 export default function ManageBalance() {
   const { publicKey } = useWallet();
-  const { driftClient, balances, subaccounts, refetchBalances } = useDrift();
+  const { driftClient, subaccounts, balances, refetchBalances } = useDrift();
   const [isOpen, setIsOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>();
   const [balance, setBalance] = useState<number>(0);
@@ -31,7 +31,7 @@ export default function ManageBalance() {
 
   if (!driftClient) return null;
 
-  const user = driftClient.getUser();
+  const user = driftClient?.getUser();
   const activeSubaccount = user?.getUserAccountPublicKey().toBase58();
 
   const activeSubaccountIndex = subaccounts.findIndex(

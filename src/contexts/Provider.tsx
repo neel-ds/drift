@@ -6,6 +6,7 @@ import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adap
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { DriftProvider } from "./DriftContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 interface WalletProps {
   children: React.ReactNode;
@@ -13,12 +14,15 @@ interface WalletProps {
 
 export const Provider: FC<WalletProps> = ({ children }) => {
   const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()], []);
+  const queryClient = new QueryClient();
 
   return (
-    <WalletProvider wallets={wallets} autoConnect>
-      <WalletModalProvider>
-        <DriftProvider>{children}</DriftProvider>
-      </WalletModalProvider>
-    </WalletProvider>
+    <QueryClientProvider client={queryClient}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          <DriftProvider>{children}</DriftProvider>
+        </WalletModalProvider>
+      </WalletProvider>
+    </QueryClientProvider>
   );
 };
