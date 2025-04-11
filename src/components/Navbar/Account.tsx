@@ -64,7 +64,7 @@ export default function Account() {
   if (isNewUser) {
     return (
       <>
-        {/* Button - Create subaccount for new user */}
+        {/* CTA - Create subaccount for new user */}
         <Button
           variant="outline"
           className="hidden md:inline-flex h-8"

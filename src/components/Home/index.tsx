@@ -37,7 +37,7 @@ export default function Home() {
         <Orders />
       </div>
 
-      {/* TRADING WIDGETS */}
+      {/* TRADING WIDGET */}
       <Trade />
     </div>
   );

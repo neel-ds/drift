@@ -11,8 +11,13 @@ import { openMarketShortPosition } from "@/lib/perps/openMarketShortPosition";
 import { openLimitLongPosition } from "@/lib/perps/openLimitLongPosition";
 import { openLimitShortPosition } from "@/lib/perps/openLimitShortPosition";
 import { Loader2 } from "lucide-react";
-
-function Widget({ type }: { type: "MARKET" | "LIMIT" }) {
+import { WidgetProps } from "@/types/trade";
+/**
+ * Widget for trading orders
+ * @param type - MarketType
+ * @returns The widget for trading
+ */
+function Widget({ type }: WidgetProps) {
   const { driftClient, subaccounts, balances } = useDrift();
   const [amount, setAmount] = useState<number | undefined>();
   const [price, setPrice] = useState<string>("");
@@ -21,8 +26,8 @@ function Widget({ type }: { type: "MARKET" | "LIMIT" }) {
   const { data: solPrice, isLoading: isPriceLoading } = useQuery({
     queryKey: ["solPrice"],
     queryFn: getSolPrice,
-    staleTime: 5000,
-    refetchInterval: 5000,
+    staleTime: 2000,
+    refetchInterval: 2000,
   });
 
   useEffect(() => {
@@ -40,10 +45,10 @@ function Widget({ type }: { type: "MARKET" | "LIMIT" }) {
     setIsLoading(true);
     try {
       if (type === "MARKET") {
-        await openMarketLongPosition(driftClient, amount);
+        await openMarketLongPosition({ driftClient, amount });
       } else {
         if (!price) return;
-        await openLimitLongPosition(driftClient, amount, Number(price));
+        await openLimitLongPosition({ driftClient, amount, price: Number(price) });
       }
     } finally {
       setIsLoading(false);
@@ -55,10 +60,10 @@ function Widget({ type }: { type: "MARKET" | "LIMIT" }) {
     setIsLoading(true);
     try {
       if (type === "MARKET") {
-        await openMarketShortPosition(driftClient, amount);
+        await openMarketShortPosition({ driftClient, amount });
       } else {
         if (!price) return;
-        await openLimitShortPosition(driftClient, amount, Number(price));
+        await openLimitShortPosition({ driftClient, amount, price: Number(price) });
       }
     } finally {
       setIsLoading(false);
@@ -88,6 +93,8 @@ function Widget({ type }: { type: "MARKET" | "LIMIT" }) {
           SHORT
         </TabsTrigger>
       </TabsList>
+
+      {/* LONG ORDER DIRECTION */}
       <TabsContent value="LONG">
         <div className="flex flex-col gap-1 py-5 border-t border-neutral-800 text-center text-neutral-400">
           <Label htmlFor="amount" className="text-xs text-neutral-400">
@@ -161,6 +168,8 @@ function Widget({ type }: { type: "MARKET" | "LIMIT" }) {
           </Button>
         </div>
       </TabsContent>
+
+      {/* SHORT ORDER DIRECTION */}
       <TabsContent value="SHORT">
         <div className="flex flex-col gap-1 py-5 border-t border-neutral-800 text-center text-neutral-400">
           <Label htmlFor="amount" className="text-xs text-neutral-400">

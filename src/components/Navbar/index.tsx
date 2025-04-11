@@ -35,7 +35,7 @@ export default function Navbar() {
         Drift
       </Link>
 
-      {/* LOGIN CTA */}
+      {/* Connect Wallet CTA */}
       {isLoading ? (
         <Button
           className="bg-gradient-to-r from-orange-300 via-violet-500 to-sky-400 text-neutral-900 px-6"
@@ -45,7 +45,7 @@ export default function Navbar() {
         </Button>
       ) : (
         <div className="flex items-center gap-2">
-          {/* Login Button */}
+          {/* Solana Wallet Adapter */}
           <WalletButton
             style={{
               background: "linear-gradient(to right, #fdba74, #8b5cf6, #38bdf8)",

@@ -114,6 +114,8 @@ export default function ManageBalance() {
               Withdraw
             </TabsTrigger>
           </TabsList>
+
+          {/* DEPOSIT AMOUNT */}
           <TabsContent value="deposit">
             <div className="flex flex-col gap-1 py-5 border-t border-neutral-800 text-center text-neutral-400">
               <Label htmlFor="amount" className="text-xs text-neutral-400">
@@ -166,6 +168,8 @@ export default function ManageBalance() {
               </Button>
             </div>
           </TabsContent>
+
+          {/* WITHDRAW AMOUNT */}
           <TabsContent value="withdraw">
             <div className="flex flex-col gap-1 py-5 border-t border-neutral-800 text-center text-neutral-400">
               <Label htmlFor="amount" className="text-xs text-neutral-400">

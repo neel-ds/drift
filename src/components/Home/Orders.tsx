@@ -21,10 +21,11 @@ import { Button } from "../ui/button";
 export default function Orders() {
   const [isCancelling, setIsCancelling] = useState(false);
   const { driftClient } = useDrift();
+
   const { data, isLoading } = useQuery({
     queryKey: ["userPerps"],
-    queryFn: () => getUserPerpsAndOrders(driftClient),
-    staleTime: 5000,
+    queryFn: () => getUserPerpsAndOrders({ driftClient }),
+    staleTime: 2000,
     refetchInterval: 2000,
     enabled: !!driftClient,
   });
@@ -57,7 +58,7 @@ export default function Orders() {
             className="data-[state=active]:bg-transparent border-r border-neutral-800"
           >
             Positions{" "}
-            {data?.position ? (
+            {data?.position && convertToNumber(data?.position.baseAssetAmount) !== 0 ? (
               <span className="text-[10px] bg-neutral-700/50 px-1.5 rounded-full w-fit">1</span>
             ) : null}
           </TabsTrigger>
@@ -70,10 +71,12 @@ export default function Orders() {
             ) : null}
           </TabsTrigger>
         </TabsList>
+
+        {/* POSITIONS LIST */}
         <TabsContent value="positions">
           {isLoading ? (
             <div className="h-[20rem] border-t border-neutral-700 text-xs text-center text-neutral-400">
-              Loading positions...
+              Fetching positions...
             </div>
           ) : (
             <div className="h-[20rem] overflow-y-auto border-t border-neutral-700">
@@ -87,7 +90,7 @@ export default function Orders() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {data?.position ? (
+                  {data?.position && convertToNumber(data?.position.baseAssetAmount) !== 0 ? (
                     <TableRow>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -98,21 +101,25 @@ export default function Orders() {
                           <div className="flex flex-col">
                             <p>SOL-PERP</p>
                             <span
-                              className={`${getPositionType(data?.position?.baseAssetAmount) === "LONG" ? "bg-emerald-400/50" : "bg-red-400/50"} px-1 w-fit text-[10px]`}
+                              className={`${getPositionType(data.position.baseAssetAmount) === "LONG" ? "bg-emerald-400/50" : "bg-red-400/50"} px-1 w-fit text-[10px]`}
                             >
-                              {getPositionType(data?.position?.baseAssetAmount)}
+                              {getPositionType(data.position.baseAssetAmount)}
                             </span>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        {convertToNumber(data.position.baseAssetAmount) / 1000} SOL
+                        {Math.abs(convertToNumber(data.position.baseAssetAmount)) / 1000} SOL
                       </TableCell>
-                      <TableCell>${convertToNumber(data.position.quoteEntryAmount)}</TableCell>
+                      <TableCell>-</TableCell>
                       <TableCell
-                        className={data.pnl.words[0] >= 0 ? "text-green-500" : "text-red-500"}
+                        className={
+                          Math.abs(convertToNumber(data.pnl)) >= 0
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }
                       >
-                        ${convertToNumber(data.pnl).toFixed(2)}
+                        ${Math.abs(convertToNumber(data.pnl)).toFixed(2)}
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -127,10 +134,12 @@ export default function Orders() {
             </div>
           )}
         </TabsContent>
+
+        {/* ORDERS LIST */}
         <TabsContent value="orders">
           {isLoading ? (
             <div className="h-[20rem] border-t border-neutral-700 text-xs text-center text-neutral-400">
-              Loading orders...
+              Fetching orders...
             </div>
           ) : data?.orders ? (
             <div className="h-[20rem] overflow-y-auto border-t border-neutral-700">
@@ -173,7 +182,11 @@ export default function Orders() {
                             size="xs"
                             className="cursor-pointer bg-red-400/50 py-0.5 px-1 [&_svg:not([class*='size-'])]:size-4"
                             onClick={() => {
-                              cancelOrderById(driftClient, order.orderId, setIsCancelling);
+                              cancelOrderById({
+                                driftClient,
+                                orderId: order.orderId,
+                                setIsCancelling,
+                              });
                             }}
                             disabled={isCancelling}
                           >

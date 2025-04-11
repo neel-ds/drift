@@ -1,4 +1,4 @@
-import { DriftClient } from "@drift-labs/sdk";
+import { OpenPerpPositionProps } from "@/types/perps";
 import { OrderType, PositionDirection } from "@drift-labs/sdk";
 import { toast } from "sonner";
 
@@ -9,10 +9,9 @@ import { toast } from "sonner";
  * @returns Promise<void>
  * @throws Error if the position cannot be opened
  */
-export const openMarketLongPosition = async (
-  driftClient: DriftClient,
-  amount: number,
-): Promise<void> => {
+export const openMarketLongPosition = async ({ driftClient, amount }: OpenPerpPositionProps) => {
+  if (!driftClient) return;
+
   try {
     const orderParams = {
       orderType: OrderType.MARKET,

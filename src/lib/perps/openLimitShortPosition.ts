@@ -1,4 +1,4 @@
-import { DriftClient } from "@drift-labs/sdk";
+import { OpenLimitPositionProps } from "@/types/perps";
 import { OrderType, PositionDirection } from "@drift-labs/sdk";
 import { toast } from "sonner";
 
@@ -10,11 +10,13 @@ import { toast } from "sonner";
  * @returns Promise<void>
  * @throws Error if the position cannot be opened
  */
-export const openLimitShortPosition = async (
-  driftClient: DriftClient,
-  amount: number,
-  price: number,
-): Promise<void> => {
+export const openLimitShortPosition = async ({
+  driftClient,
+  amount,
+  price,
+}: OpenLimitPositionProps) => {
+  if (!driftClient) return;
+
   try {
     const orderParams = {
       orderType: OrderType.LIMIT,

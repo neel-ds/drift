@@ -1,11 +1,11 @@
-import { DriftClient } from "@drift-labs/sdk";
+import { GetPerpsAndOrdersProps } from "@/types/orders";
 
 /**
  * Gets the user's perps and orders
  * @param driftClient - The drift client
  * @returns The user's perps and orders
  */
-export const getUserPerpsAndOrders = async (driftClient: DriftClient | null) => {
+export const getUserPerpsAndOrders = async ({ driftClient }: GetPerpsAndOrdersProps) => {
   if (!driftClient) return null;
   const user = driftClient.getUser();
 

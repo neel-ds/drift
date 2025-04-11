@@ -1,5 +1,5 @@
-import { DriftClient } from "@drift-labs/sdk";
 import { toast } from "sonner";
+import { CancelOrderProps } from "@/types/orders";
 
 /**
  * Cancels an order by its ID
@@ -7,11 +7,11 @@ import { toast } from "sonner";
  * @param orderId - The ID of the order to cancel
  * @param setIsCancelling - A function to set the state of the cancelling order
  */
-export const cancelOrderById = async (
-  driftClient: DriftClient | null,
-  orderId: number,
-  setIsCancelling: (isCancelling: boolean) => void,
-) => {
+export const cancelOrderById = async ({
+  driftClient,
+  orderId,
+  setIsCancelling,
+}: CancelOrderProps) => {
   if (!driftClient) return;
   try {
     setIsCancelling(true);
